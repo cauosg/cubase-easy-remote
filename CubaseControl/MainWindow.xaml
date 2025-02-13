@@ -1,0 +1,33 @@
+﻿<Window x:Class="CubaseRemote.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cubase Remote" Height="300" Width="400">
+	<Grid>
+		<!-- UI 레이아웃: 왼쪽 (트랙 선택), 오른쪽 (볼륨 슬라이더) -->
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+
+		<!-- 채널 선택 Dropdown -->
+		<StackPanel Grid.Column="0" Margin="10">
+			<TextBlock Text="믹서 채널 선택" FontWeight="Bold"/>
+			<ComboBox Name="ChannelList" Height="30" SelectionChanged="ChannelList_SelectionChanged"/>
+		</StackPanel>
+
+		<!-- 볼륨 슬라이더 (세로) -->
+		<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" Margin="10">
+			<TextBlock Text="볼륨" HorizontalAlignment="Center" />
+			<Slider Name="VolumeSlider" Minimum="0" Maximum="127" Orientation="Vertical"
+                    ValueChanged="VolumeSlider_ValueChanged" Height="150" />
+			<TextBlock Name="VolumeLabel" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+		</StackPanel>
+
+		<!-- 상태 표시바 -->
+		<StatusBar Grid.ColumnSpan="2" VerticalAlignment="Bottom">
+			<StatusBarItem>
+				<TextBlock Name="StatusBar" Text="Initializing..." />
+			</StatusBarItem>
+		</StatusBar>
+	</Grid>
+</Window>
