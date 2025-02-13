@@ -1,0 +1,28 @@
+﻿<Window x:Class="CubaseControl.TrackDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add Track" Height="180" Width="300"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+			<TextBlock Text="Track Name:" Width="90"/>
+			<TextBox Name="TrackNameInput" Width="150" IsReadOnly="True"/>
+		</StackPanel>
+
+		<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+			<TextBlock Text="Track Number:" Width="90"/>
+			<TextBox Name="TrackNumberInput" Width="70" IsReadOnly="True"/>
+		</StackPanel>
+
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+			<Button Name="AddTrackButton" Content="Add" Width="70" Margin="5" Click="ConfirmAddTrack_Click"/>
+			<Button Name="CancelTrackButton" Content="Cancel" Width="70" Margin="5" Click="CancelAddTrack_Click"/>
+		</StackPanel>
+	</Grid>
+</Window>
