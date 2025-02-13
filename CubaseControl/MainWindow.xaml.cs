@@ -11,7 +11,7 @@ namespace CubaseControl
     public partial class MainWindow : Window
     {
         private const string SettingsFilePath = "tracks.json";
-        private List<TrackData> Tracks = new();
+        private Preset preset;
 
         public MainWindow()
         {
@@ -22,28 +22,39 @@ namespace CubaseControl
 
         private void AddTrack_Click(object sender, RoutedEventArgs e)
         {
-            int nextIndex = Tracks.Count + 1;
+            int nextIndex = preset.Tracks.Count + 1;
             string suggestedName = $"Mixer {nextIndex}";
             int suggestedNumber = nextIndex;
 
-            TrackDialog dialog = new TrackDialog(suggestedName, suggestedNumber, Tracks);
+            TrackDialog dialog = new TrackDialog(suggestedName, suggestedNumber, preset.Tracks);
             dialog.Owner = this; // 메인 창의 가운데에서 팝업
             if (dialog.ShowDialog() == true)
             {
-                Tracks.Add(new TrackData { Name = dialog.TrackName, Number = dialog.TrackNumber, Volume = 50, IsMuted = false });
+                preset.Tracks.Add(new TrackData { Name = dialog.TrackName, Number = dialog.TrackNumber, Volume = 50, IsMuted = false });
                 SaveTracks();
                 RenderTracks();
             }
         }
 
-        private void RenderTracks()
+        public void ApplyPreset(Preset preset)
+        {
+            this.preset = preset;
+            RenderTracks();
+        }
+
+        public void RenderTracks()
         {
             MixerPanel.Children.Clear();
-            MixerPanel.Columns = Math.Max(1, Math.Min(Tracks.Count, 5)); // 1/n 비율 유지 (최소 1:5, 최대 1:2)
-            foreach (var track in Tracks)
+            MixerPanel.Columns = Math.Max(1, Math.Min(preset.Tracks.Count, 5)); // 1/n 비율 유지 (최소 1:5, 최대 1:2)
+            foreach (var track in preset.Tracks)
             {
                 MixerPanel.Children.Add(CreateTrackUI(track));
             }
+        }
+
+        public void UpdateTrackUI(TrackData trackData)
+        {
+
         }
 
         private UIElement CreateTrackUI(TrackData track)
@@ -113,23 +124,15 @@ namespace CubaseControl
 
         private void SaveTracks()
         {
-            File.WriteAllText(SettingsFilePath, JsonSerializer.Serialize(Tracks));
+            File.WriteAllText(SettingsFilePath, JsonSerializer.Serialize(preset.Tracks));
         }
 
         private void LoadTracks()
         {
             if (File.Exists(SettingsFilePath))
             {
-                Tracks = JsonSerializer.Deserialize<List<TrackData>>(File.ReadAllText(SettingsFilePath)) ?? new List<TrackData>();
+                preset.Tracks = JsonSerializer.Deserialize<List<TrackData>>(File.ReadAllText(SettingsFilePath)) ?? new List<TrackData>();
             }
         }
-    }
-
-    public class TrackData
-    {
-        public string Name { get; set; }
-        public int Number { get; set; }
-        public int Volume { get; set; }
-        public bool IsMuted { get; set; }
     }
 }
